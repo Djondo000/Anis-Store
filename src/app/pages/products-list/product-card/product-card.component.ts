@@ -10,38 +10,41 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
   imports: [PrimaryButtonComponent, RouterLink],
   template: `
     <div 
-      class="bg-white shadow-md border rounded-xl p-6 flex flex-col gap-6 relative cursor-pointer" 
-      [routerLink]="['/detail', product().id]"
-    >
-      <div class="mx-auto mt-2">
-        <img
-          [src]="product().images[0]"
-          class="w-full h-[260px] object-cover rounded-lg"  
-        />
-      </div>
+  class="bg-white shadow-md border rounded-xl p-4 flex flex-col gap-4 relative cursor-pointer w-full max-w-[280px] mx-auto"
+  [routerLink]="['/detail', product().id]"
+>
+  <!-- Image Container -->
+  <div class="w-full h-[180px] flex justify-center items-center overflow-hidden">
+    <img
+      [src]="product().images[0]"
+      class="w-full h-full object-cover rounded-lg"
+    />
+  </div>
 
-      <div class="flex flex-col">
-        <span class="text-md font-bold">{{ product().title }}</span>
-        <span class="text-sm"> {{ product().price + ' DA ' }}</span>
-        
-        <!-- This div will hold the button and it will not affect the routerLink -->
-        <div (click)="$event.stopPropagation()"> 
-          <app-primary-button
-            (btnClicked)="addToCart()"
-            class="mt-2"
-            label="Ajouter au panier"
-            [icon]="faCartPlus"
-          />
-        </div>
-      </div>
+  <!-- Product Info -->
+  <div class="flex flex-col">
+    <span class="text-md font-bold text-center">{{ product().title }}</span>
+    <span class="text-sm text-center">{{ product().price + ' DA ' }}</span>
 
-      <span
-        class="absolute top-2 right-3 text-sm font-bold bg-white shadow-md border rounded-xl p-2 flex flex-col gap-6"
-        [class]="product().stock ? 'text-green-700' : 'text-red-700'"
-      >
-        {{ product().stock ? product().stock + ' left' : 'Out of stock' }}
-      </span>
+    <!-- Add to Cart Button -->
+    <div (click)="$event.stopPropagation()" class="mt-2 flex justify-center">
+      <app-primary-button
+        (btnClicked)="addToCart()"
+        label="Ajouter au panier"
+        [icon]="faCartPlus"
+      />
     </div>
+  </div>
+
+  <!-- Stock Label -->
+  <span
+    class="absolute top-2 right-3 text-xs font-bold bg-white shadow-md border rounded-xl p-1"
+    [class]="product().stock ? 'text-green-700' : 'text-red-700'"
+  >
+    {{ product().stock ? product().stock + ' left' : 'Out of stock' }}
+  </span>
+</div>
+
   `,
   styles: [],
 })

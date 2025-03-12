@@ -13,4 +13,5 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
 })
 export class AppComponent {
   faCartPlus = faCartPlus;
+  //hhh
 }
