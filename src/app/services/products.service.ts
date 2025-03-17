@@ -1,85 +1,58 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+import { Firestore, collection, getDocs, query, where, limit, startAfter, collectionData } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 import { Product } from '../pages/products-list/products-list.component';
 
 @Injectable({
-  providedIn: 'root', // Makes this service globally available
+  providedIn: 'root',
 })
 export class ProductsService {
-  private productsList: Product[] = [
-    {
-      id: 1,
-      title: 'قميص أفغاني',
-      price: 4999.95,
-      images:  ['images/chemiseB.jpeg', 'images/chemiseBleu.jpeg','images/chemiseG.jpeg','images/chemise beige.jpeg','images/chemise beige.jpeg','images/chemise beige.jpeg','images/default-image.png'],
-      stock: 10,
-      quantity: 1
-    },
-    {
-      id: 2,
-      title: 'قميص كويتي',
-      price: 2500,
-      images: ['images/chemiseBleu.jpeg'],
-      stock: 0,
-      quantity: 1
-    },
-    {
-      id: 3,
-      title: 'قميص سعودي',
-      price: 3000,
-      images: ['images/chemiseG.jpeg'],
-      stock: 5,
-      quantity: 1
-    },
-    {
-      id: 4,
-      title: 'قميص إماراتي',
-      price: 4000,
-      images: ['images/chemise beige.jpeg'],
-      stock: 7,
-      quantity: 1
-    },
-    {
-      id: 5,
-      title: 'قميص أفغاني',
-      price: 4999.95,
-      images: ['images/chemiseB.jpeg'],
-      stock: 10,
-      quantity: 1
-    },
-    {
-      id: 6,
-      title: 'قميص كويتي',
-      price: 2500,
-      images: ['images/chemiseBleu.jpeg'],
-      stock: 0,
-      quantity: 1
-    },
-    {
-      id: 7,
-      title: 'قميص سعودي',
-      price: 3000,
+  private productsCollection = 'products';
+  public selectedSubCategory = signal<string | null>(null);
 
-      images: ['images/chemiseG.jpeg'],
-      stock: 5,
-      quantity: 1
-    },
-    {
-      id: 8,
-      title: 'قميص إماراتي',
-      price: 4000,
-      images: ['images/chemise beige.jpeg'],
-      stock: 7,
-      quantity: 1
-    },
-  ];
+  constructor(private firestore: Firestore) {}
 
-  // Method to get all products
-  getProducts(): Product[] {
-    return this.productsList;
+  getProducts(category: string, subCategory: string | null, lastDoc: any): Observable<Product[]> {
+    // Create the base query
+    let q = query(
+      collection(this.firestore, this.productsCollection),
+      where('category', '==', subCategory), 
+      limit(10)
+    );
+    
+    console.log('Firestore query:', q);
+
+    return new Observable<Product[]>(observer => {
+      getDocs(q)
+        .then(snapshot => {
+          console.log('Fetched documents:', snapshot.docs); // Log fetched docs
+          
+          if (snapshot.empty) {
+            console.log('No products found for the query');
+          }
+          // Map the data to Product type
+          const products = snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+          } as unknown as Product));
+          observer.next(products);
+          observer.complete();
+        })
+        .catch(error => {
+          console.error('Error fetching products:', error);
+          observer.error(error);
+        });
+    });
+  }
+getSubCategories(subCategoryKey: string): Observable<{ id: string; name: string }[]> {
+    const categoriesRef = collection(this.firestore, subCategoryKey);
+    return collectionData(categoriesRef, { idField: 'id' }) as Observable<{ id: string; name: string }[]>;
   }
 
-  // Method to get a product by ID
-  getProductById(id: number): Product | undefined {
-    return this.productsList.find(p => p.id === id);
+  setSelectedSubCategory(subCategoryId: string) {
+    this.selectedSubCategory.set(subCategoryId);
+  }
+  getSelectedSubCategory(): string | null {
+    return this.selectedSubCategory();
   }
 }

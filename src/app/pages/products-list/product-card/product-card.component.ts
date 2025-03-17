@@ -13,11 +13,12 @@ import { faCartPlus } from '@fortawesome/free-solid-svg-icons';
   class="bg-white shadow-md border rounded-xl p-4 flex flex-col gap-4 relative cursor-pointer w-full max-w-[280px] mx-auto"
   [routerLink]="['/detail', product().id]"
 >
-  <!-- Image Container -->
-  <div class="w-full h-[180px] flex justify-center items-center overflow-hidden">
+  <!-- Image Container --> 
+  <div class="w-full h-[300px] flex justify-center items-center overflow-hidden">
     <img
       [src]="product().images[0]"
       class="w-full h-full object-cover rounded-lg"
+      style="object-fit: cover;object-position: top;"
     />
   </div>
 

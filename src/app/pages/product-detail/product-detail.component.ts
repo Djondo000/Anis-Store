@@ -9,35 +9,39 @@ import { OrderFormComponent } from './order-form.component';
   standalone: true,
   imports: [CommonModule, OrderFormComponent],
   template: `
-<div class="p-8 text-center">
-  
-  <div class="flex gap-4 mt-4 mx-auto">
+<div class="p-2 text-center">
+  <div class="flex flex-col md:flex-row gap-4 mt-4 mx-auto">
 
-    <!-- Thumbnail Selector on the Left -->
-    <div class="flex flex-col gap-2 w-[80px]">
-      <img 
-        *ngFor="let img of product?.images; let i = index" 
-        [src]="img" 
-        (click)="selectedImage = img" 
-        class="w-16 h-16 object-cover rounded-lg border cursor-pointer hover:border-green-500"
-      />
-    </div>
-
-    <!-- Product details card taking half screen width -->
-    <div class="bg-white shadow-md border rounded-xl p-4 flex flex-col justify-center items-center flex-1">
-      <!-- Main Image Display -->
-      <div class="flex flex-col">
-        <span class="text-2xl font-bold">{{ product?.title }}</span>
-        <span class="text-xl text-green-600 font-bold">{{ product?.price + ' DA' }}</span>
+    <!-- Thumbnail and Main Image Container -->
+    <div class="flex flex-row gap-4 relative">
+      <!-- Thumbnail Selector on the Left -->
+      <div class="flex flex-col gap-2 w-[50px]">
+        <img 
+          *ngFor="let img of product?.images; let i = index" 
+          [src]="img" 
+          (click)="selectedImage = img" 
+          class="w-16 h-16 object-cover rounded-lg border cursor-pointer hover:border-green-500"
+        />
       </div>
-      <div class="mx-auto mt-2">
+
+      <!-- Main Image Display with Description and Price Positioned at the Top -->
+      <div class="flex flex-col flex-1 relative">
+        <!-- Product details card (description, price, etc.) -->
+        
         <img 
           [src]="selectedImage ?? 'assets/default-image.jpg'" 
           class="w-full object-contain rounded-lg"
         />
+        <div class="bg-white shadow-md border rounded-xl p-4 mt-4 md:mt-0 flex flex-col items-center w-fit">
+  <span class="text-2xl font-bold">{{ product?.title }}</span>
+  <span class="text-xl text-green-600 font-bold">{{ product?.price + ' DA' }}</span>
+</div>
+
+
       </div>
     </div>
-    <app-order-form [showQuantity]="true"> </app-order-form>
+
+    <app-order-form [showQuantity]="true"></app-order-form>
   </div>
 </div>
 
@@ -57,7 +61,15 @@ export class ProductDetailComponent {
   }
 
   private loadProduct() {
-    this.product = this.productsService.getProductById(this.productId);
+    // this.productsService.getProductById(this.productId).subscribe(product => {
+    //   if (product) {
+    //     this.product = product; // Assign the product only if it's not undefined
+    //   } else {
+    //     console.error('Product not found');
+    //   }
+    // });
+    
     this.selectedImage = this.product?.images?.[0]; // Set default image
   }
+  
 }

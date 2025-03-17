@@ -1,0 +1,99 @@
+async addProducts() {
+    const products = [
+      {
+        id: 1,
+        title: 'قميص أفغاني',
+        price: 4999.95,
+        images:  ['images/default-image.png', 'images/chemiseBleu.jpeg','images/chemiseG.jpeg','images/chemise beige.jpeg','images/chemise beige.jpeg','images/chemise beige.jpeg','images/default-image.png'],
+        stock: 10,
+        quantity: 1
+      },
+      {
+        id: 2,
+        title: 'قميص كويتي',
+        price: 2500,
+        images: ['images/chemiseBleu.jpeg'],
+        stock: 0,
+        quantity: 1
+      },
+      {
+        id: 3,
+        title: 'قميص سعودي',
+        price: 3000,
+        images: ['images/chemiseG.jpeg'],
+        stock: 5,
+        quantity: 1
+      },
+      {
+        id: 4,
+        title: 'قميص إماراتي',
+        price: 4000,
+        images: ['images/chemise beige.jpeg'],
+        stock: 7,
+        quantity: 1
+      },
+      {
+        id: 5,
+        title: 'قميص أفغاني',
+        price: 4999.95,
+        images: ['images/chemiseB.jpeg'],
+        stock: 10,
+        quantity: 1
+      },
+      {
+        id: 6,
+        title: 'قميص كويتي',
+        price: 2500,
+        images: ['images/chemiseBleu.jpeg'],
+        stock: 0,
+        quantity: 1
+      },
+      {
+        id: 7,
+        title: 'قميص سعودي',
+        price: 3000,
+        images: ['images/chemiseG.jpeg'],
+        stock: 5,
+        quantity: 1
+      },
+      {
+        id: 8,
+        title: 'قميص إماراتي',
+        price: 4000,
+        images: ['images/chemise beige.jpeg'],
+        stock: 7,
+        quantity: 1
+      }
+    ];
+    const productsRef = collection(this.firestore, this.collectionName);
+
+    try {
+      for (const product of products) {
+        await addDoc(productsRef, product);
+      }
+      console.log('Products added successfully');
+    } catch (error) {
+      console.error('Error adding products:', error);
+    }
+  }
+
+  async addCategories() {
+    const categories = ['Tous', 'Chemises', 'Vestes', 'Pantalons', 'Accessoires'];
+    const categoriesRef = collection(this.firestore, this.categoriesCollection);
+
+    try {
+      for (const category of categories) {
+        await addDoc(categoriesRef, { name: category });
+      }
+      console.log('Categories added successfully');
+    } catch (error) {
+      console.error('Error adding categories:', error);
+    }
+  }
+
+  .then(snapshot => {
+          console.log('Fetched documents:', snapshot.docs); // Log fetched docs
+          
+          if (snapshot.empty) {
+            console.log('No products found for the query');
+          }

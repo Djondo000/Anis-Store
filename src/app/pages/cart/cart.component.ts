@@ -8,27 +8,29 @@ import { OrderFormComponent } from '../product-detail/order-form.component';
   selector: 'app-cart',
   imports: [CartItemComponent, OrderSummaryComponent, OrderFormComponent, CommonModule],
   template: `
-    <div class="p-6 flex flex-col gap-4">
+   <div class="p-6 flex flex-col gap-4">
   <h2 class="text-xl bg-slate-100 font-bold mt-1 px-4 py-3 shadow-md flex justify-between items-center">
     PANIER D'ACHAT
   </h2>
 
-  <!-- Cart Layout: Items take all available space, Form sticks to the right -->
-  <div class="flex gap-6">
+  <!-- Cart Layout: Responsive (Column on small screens, Row on large screens) -->
+  <div class="flex flex-col md:flex-row gap-6">
     <!-- Left Side: Cart Items (Takes all available space) -->
     <div class="flex-1 flex flex-col gap-4">
-    <app-order-summary />
+      <app-order-summary />
       <div *ngFor="let item of cartService.cart(); trackBy: trackById" class="flex justify-between items-center w-full">
         <app-cart-item [item]="item" class="w-full" />
       </div>
     </div>
 
-    <!-- Right Side: Order Form (Fixed width) -->
-    <div class="w-[350px] flex-shrink-0">
+    <!-- Right Side: Order Form -->
+    <div class="md:w-[350px] w-full">
       <app-order-form [showQuantity]="false"></app-order-form>
     </div>
   </div>
 </div>
+
+
 
 
   `,
