@@ -393,6 +393,11 @@ License: "Apache-2.0"
 
 
 --------------------------------------------------------------------------------
+Package: @firebase/storage
+License: "Apache-2.0"
+
+
+--------------------------------------------------------------------------------
 Package: @fortawesome/fontawesome-svg-core
 License: "MIT"
 
